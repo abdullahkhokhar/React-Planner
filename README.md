@@ -2,7 +2,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## React To Do Application!
 
-![](https://media.giphy.com/media/J4yRvhzW43xXHZu8cM/giphy.mp4)
+![](https://media.giphy.com/media/J4yRvhzW43xXHZu8cM/giphy.gif)
 
 ### `All Components - List, Add, Remove Todos`
 As per handout:
