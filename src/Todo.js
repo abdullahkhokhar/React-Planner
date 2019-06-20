@@ -1,71 +1,80 @@
-import React, {Component} from 'react';
-import './Todo.css'
+import React, { Component } from "react";
+import "./Todo.css";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-class ToDo extends Component{
-  constructor(props){
+class Todo extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       isEditing: false,
       task: this.props.task
-    }
+    };
     this.handleRemove = this.handleRemove.bind(this);
     this.toggleForm = this.toggleForm.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
   }
-
-  handleRemove(){
-    this.props.removeToDo(this.props.id);
+  handleRemove() {
+    this.props.removeTodo(this.props.id);
   }
-
-  toggleForm(){
-    this.setState({
-      isEditing: !this.state.isEditing
-    });
+  toggleForm() {
+    this.setState({ isEditing: !this.state.isEditing });
   }
-
-  handleUpdate(evt){
+  handleUpdate(evt) {
     evt.preventDefault();
-    // get the new task data that is given to us and pass up to the parent
+    //take new task data and pass up to parent
     this.props.updateTodo(this.props.id, this.state.task);
+    this.setState({ isEditing: false });
+  }
+  handleChange(evt) {
     this.setState({
-      isEditing: false
+      [evt.target.name]: evt.target.value
     });
   }
-
-  handleChange(evt){
-    this.setState({
-      [evt.target.name]: [evt.target.value]
-    })
-  }
-
-  handleToggle(evt){
+  handleToggle(evt) {
     this.props.toggleTodo(this.props.id);
   }
-
-  render(){
+  render() {
     let result;
-    if(this.state.isEditing){
+    if (this.state.isEditing) {
       result = (
-        <div>
-          <form onSubmit = {this.handleUpdate}>
-            <input type = "text" value={this.state.task} name="task" onChange={this.handleChange}/>
+        <CSSTransition key='editing' timeout={500} classNames='form'>
+          <form className='Todo-edit-form' onSubmit={this.handleUpdate}>
+            <input
+              type='text'
+              value={this.state.task}
+              name='task'
+              onChange={this.handleChange}
+            />
             <button>Save</button>
           </form>
-        </div>
-      )
+        </CSSTransition>
+      );
     } else {
       result = (
-        <div>
-          <button onClick={this.toggleForm}>Edit</button>
-          <button onClick={this.handleRemove}>X</button>
-          <li onClick={this.handleToggle} className={this.props.completed ? 'completed' : ''}>{this.props.task}</li>
-        </div>
-      )
+        <CSSTransition key='normal' timeout={500} classNames='task-text'>
+          <li className='Todo-task' onClick={this.handleToggle}>
+            {this.props.task}
+          </li>
+        </CSSTransition>
+      );
     }
-    return result;
+    return (
+      <TransitionGroup
+        className={this.props.completed ? "Todo completed" : "Todo"}
+      >
+        {result}
+        <div className='Todo-buttons'>
+          <button onClick={this.toggleForm}>
+            <i class='fas fa-pen' />
+          </button>
+          <button onClick={this.handleRemove}>
+            <i class='fas fa-trash' />
+          </button>
+        </div>
+      </TransitionGroup>
+    );
   }
 }
-
-export default ToDo;
+export default Todo;
