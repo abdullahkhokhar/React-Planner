@@ -5,9 +5,11 @@ class ToDo extends Component{
     super(props);
     this.state = {
       isEditing: false
+      task: ""
     }
     this.handleRemove = this.handleRemove.bind(this);
     this.toggleForm = this.toggleForm.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleRemove(){
@@ -20,13 +22,25 @@ class ToDo extends Component{
     });
   }
 
+  handleUpdate(evt){
+    evt.preventDefault();
+    // get the new task data that is given to us and pass up to the parent
+
+  }
+
+  handleChange(evt){
+    this.setState({
+      [evt.target.name]: [evt.target.value]
+    })
+  }
+
   render(){
     let result;
     if(this.state.isEditing){
       result = (
         <div>
           <form onSubmit = {this.handleUpdate}>
-            <input type = "text" />
+            <input type = "text" value={this.state.task} name="task" onChange={this.handleChange}/>
             <button>Save</button>
           </form>
         </div>
